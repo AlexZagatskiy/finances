@@ -41,11 +41,13 @@ export class RateProvider {
   private options: ProviderOptions;
   private now: () => number;
   private quotaUntil = 0;
+
   constructor(options: ProviderOptions = {}) {
     this.options = options;
     this.now = options.now ?? Date.now;
     this.cache = new Cache(this.now);
   }
+
   private async request(path: string, authenticated = true): Promise<unknown> {
     if (authenticated && !this.options.apiKey)
       throw new ServiceError(
@@ -110,6 +112,7 @@ export class RateProvider {
       );
     }
   }
+
   async currencies(): Promise<CurrencyInfo[]> {
     const result = await this.cache.get('currencies', 86_400_000, 7 * 86_400_000, async () => {
       const data = object(await this.request('/api/v1/symbols', false));
@@ -129,6 +132,7 @@ export class RateProvider {
     });
     return result.value;
   }
+
   async banks(): Promise<BankInfo[]> {
     return (
       await this.cache.get('banks', 86_400_000, 7 * 86_400_000, async () => {
@@ -148,6 +152,7 @@ export class RateProvider {
       })
     ).value;
   }
+
   async quote(
     source: string,
     target: string,

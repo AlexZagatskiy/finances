@@ -1,6 +1,6 @@
 import countries from 'world-countries/countries.json' with { type: 'json' };
 
-export const popularCodes = ['USD', 'EUR', 'GBP', 'JPY', 'CHF', 'CAD', 'AUD', 'CNY', 'HKD', 'SGD'];
+export const popularCodes = ['USD', 'EUR', 'PLN', 'JPY', 'CHF', 'CAD', 'AUD', 'CNY', 'HKD', 'SGD'];
 export interface CurrencyInfo {
   code: string;
   name: string;
@@ -86,6 +86,7 @@ const countryBanks: Record<string, string> = {
   IT: 'bdi',
   BG: 'bnb',
 };
+
 export function countryCode(name: string): string | null {
   const aliases: Record<string, string> = {
     'South Korea': 'KR',
@@ -104,6 +105,7 @@ export function countryCode(name: string): string | null {
     null
   );
 }
+
 const flags: Record<string, string | null> = {
   USD: 'us',
   EUR: 'eu',
@@ -122,6 +124,7 @@ const flags: Record<string, string | null> = {
   XCD: null,
   XPF: null,
 };
+
 export function currencyInfo(item: { code: string; name: string; symbol: string }): CurrencyInfo {
   const matching = countries.filter((c) => Object.hasOwn(c.currencies, item.code));
   const flag = Object.hasOwn(flags, item.code)
@@ -134,6 +137,7 @@ export function currencyInfo(item: { code: string; name: string; symbol: string 
       .maximumFractionDigits ?? 2;
   return { ...item, flag, digits };
 }
+
 export function defaults(countryCode?: string) {
   const country = countries.find((c) => c.cca2 === countryCode?.toUpperCase());
   // Bulgaria adopted EUR in 2026; country datasets may lag the change.

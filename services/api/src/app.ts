@@ -50,7 +50,9 @@ export function buildApp(options: AppOptions = {}) {
       .code(500)
       .send({ code: 'INTERNAL_ERROR', message: 'Something went wrong. Please try again.' });
   });
+
   app.get('/api/health', async () => ({ status: 'ok' }));
+
   app.get('/api/bootstrap', async (request) => {
     const header = options.countryHeader
       ? request.headers[options.countryHeader.toLowerCase()]
@@ -70,8 +72,11 @@ export function buildApp(options: AppOptions = {}) {
       popularCodes,
     };
   });
+
   app.get('/api/currencies', async () => ({ currencies: await provider.currencies() }));
+
   app.get('/api/banks', async () => ({ banks: await provider.banks() }));
+
   app.post<{ Body: ConversionInput }>(
     '/api/convert',
     {
@@ -91,6 +96,7 @@ export function buildApp(options: AppOptions = {}) {
         },
       },
     },
+
     async (request) => {
       const { source, target, mode, side, amount, bank } = request.body;
       const currencies = await provider.currencies();
