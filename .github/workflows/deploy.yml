@@ -30,8 +30,11 @@ jobs:
       - name: Build
         run: npm run build -- --base-href /finances/
 
+      - name: Show build output
+        run: ls dist dist/*/browser
+
       - name: SPA fallback for GitHub Pages
-        run: cp dist/*/browser/index.html dist/*/browser/404.html
+        run: cp dist/finances/browser/index.html dist/finances/browser/404.html
 
       - uses: actions/upload-pages-artifact@v3
         with:
