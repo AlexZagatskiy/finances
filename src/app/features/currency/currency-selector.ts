@@ -25,7 +25,6 @@ import { CurrencyApi, CurrencyInfo } from './currency-api';
         <span class="neutral-flag" aria-hidden="true">¤</span>
       }
       <span>{{ selected()?.code ?? 'Select' }}</span>
-      <span class="chevron" aria-hidden="true">⌄</span>
     </button>
     <ng-template
       cdkConnectedOverlay
@@ -82,7 +81,7 @@ import { CurrencyApi, CurrencyInfo } from './currency-api';
                 <span class="option-row">
                   @if (currency.flag) {
                     <img
-                      class="flag"
+                      class="tw:ml-1 flag"
                       [src]="'/flags/' + currency.flag + '.svg'"
                       alt=""
                       width="24"
