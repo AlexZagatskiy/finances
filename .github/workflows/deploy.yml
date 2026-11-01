@@ -25,13 +25,7 @@ jobs:
           node-version: 24.21.0
           cache: npm
 
-      - name: Use the same npm as local
-        run: npm install -g npm@12.2.0
-
-      - name: Show versions
-        run: node -v && npm -v
-
-      - run: npm ci
+      - run: npm install --no-audit --no-fund
 
       - name: Build
         run: npm run build -- --base-href /finances/
