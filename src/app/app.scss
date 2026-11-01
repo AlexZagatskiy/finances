@@ -1,0 +1,98 @@
+:host {
+  display: block;
+}
+.app-container {
+  min-height: 100dvh;
+  background: var(--app-background);
+}
+.app-sidebar {
+  width: 280px;
+  border-right: 1px solid var(--app-border);
+  border-radius: 0;
+  background: var(--app-surface);
+}
+.brand-mark {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
+  background: var(--app-ink);
+  color: white;
+}
+.brand-name {
+  font-size: 25px;
+  font-weight: 750;
+  letter-spacing: -1px;
+}
+.brand-dot {
+  color: var(--app-accent);
+}
+.nav-heading {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.8px;
+  color: var(--app-muted);
+}
+.active-link {
+  background: var(--app-accent-soft);
+}
+.sidebar-note {
+  border: 1px solid var(--app-border);
+  border-radius: 16px;
+  background: var(--app-background);
+}
+.sidebar-note mat-icon {
+  color: var(--app-accent);
+}
+.sidebar-note p:last-child,
+.sidebar-footer {
+  color: var(--app-muted);
+}
+.sidebar-footer {
+  font-size: 12px;
+}
+.app-header {
+  min-height: 80px;
+  border-bottom: 1px solid var(--app-border);
+  background: var(--app-surface);
+}
+.header-label {
+  font-size: 13px;
+  color: var(--app-muted);
+}
+.preview-badge {
+  flex-shrink: 0;
+  border: 1px solid var(--app-border);
+  border-radius: 999px;
+  padding: 6px 10px;
+  font-size: 11px;
+  font-weight: 600;
+}
+.content-footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 12px;
+  color: var(--app-muted);
+  font-size: 11px;
+}
+.skip-link {
+  position: fixed;
+  z-index: 1000;
+  top: 8px;
+  left: 8px;
+  transform: translateY(-150%);
+  border-radius: 8px;
+  padding: 12px 20px;
+  background: var(--app-ink);
+  color: white;
+}
+.skip-link:focus {
+  transform: translateY(0);
+}
+@media (max-width: 767px) {
+  .app-header {
+    min-height: 72px;
+  }
+}

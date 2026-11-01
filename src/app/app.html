@@ -1,0 +1,90 @@
+<a class="skip-link" href="#main-content" (click)="$event.preventDefault(); mainContent.focus()"
+  >Skip to content</a
+>
+<mat-sidenav-container class="app-container">
+  <mat-sidenav
+    #navigation
+    id="app-navigation"
+    role="complementary"
+    aria-label="Finance navigation"
+    class="app-sidebar"
+    [mode]="isMobile() ? 'over' : 'side'"
+    [opened]="!isMobile()"
+    [fixedInViewport]="isMobile()"
+  >
+    <div class="tw:flex tw:items-center tw:gap-3 tw:px-6 tw:py-8">
+      <span class="brand-mark"><mat-icon svgIcon="wallet" /></span>
+      <span class="brand-name">Finances<span class="brand-dot">.</span></span>
+      @if (isMobile()) {
+        <button
+          mat-icon-button
+          class="tw:ml-auto"
+          aria-label="Close navigation"
+          (click)="navigation.close()"
+        >
+          <mat-icon svgIcon="close" />
+        </button>
+      }
+    </div>
+    <p class="nav-heading tw:px-6 tw:mb-3">YOUR TOOLKIT</p>
+    <nav aria-label="Finance tools" class="tw:px-3">
+      <mat-nav-list>
+        @for (item of navigationItems; track item.path) {
+          <a
+            mat-list-item
+            [routerLink]="item.path"
+            routerLinkActive="active-link"
+            #active="routerLinkActive"
+            [activated]="active.isActive"
+            ariaCurrentWhenActive="page"
+            (click)="isMobile() && navigation.close()"
+          >
+            <mat-icon matListItemIcon [svgIcon]="item.icon" />
+            <span matListItemTitle>{{ item.label }}</span>
+          </a>
+        }
+      </mat-nav-list>
+    </nav>
+    <div class="sidebar-note tw:mx-6 tw:mt-10 tw:p-4">
+      <mat-icon svgIcon="spark" />
+      <p class="tw:mt-3 tw:font-semibold">Small tools. Clearer decisions.</p>
+      <p class="tw:mt-2 tw:text-sm tw:leading-6">
+        A little more confidence in your everyday finances.
+      </p>
+    </div>
+    <p class="sidebar-footer tw:px-6 tw:py-6">Made for everyday life</p>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <header
+      class="app-header tw:flex tw:items-center tw:justify-between tw:gap-3 tw:px-4 tw:md:px-10"
+    >
+      <div class="tw:flex tw:items-center tw:gap-2">
+        @if (isMobile()) {
+          <button
+            mat-icon-button
+            aria-label="Open navigation"
+            aria-controls="app-navigation"
+            [attr.aria-expanded]="navigation.opened"
+            (click)="navigation.toggle()"
+          >
+            <mat-icon svgIcon="menu" />
+          </button>
+        }
+        <span class="header-label">Personal finance, simplified</span>
+      </div>
+      <span class="preview-badge">Early preview</span>
+    </header>
+    <main
+      #mainContent
+      id="main-content"
+      tabindex="-1"
+      class="tw:mx-auto tw:w-full tw:max-w-6xl tw:px-5 tw:py-8 tw:md:px-10 tw:md:py-12"
+    >
+      <router-outlet />
+    </main>
+    <footer class="content-footer tw:mx-auto tw:w-full tw:max-w-6xl tw:px-5 tw:pb-8 tw:md:px-10">
+      <span>One place for your financial what-ifs.</span>
+      <span>Finances · First edition</span>
+    </footer>
+  </mat-sidenav-content>
+</mat-sidenav-container>

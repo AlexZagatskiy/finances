@@ -1,0 +1,31 @@
+@use '@angular/material' as mat;
+html {
+  @include mat.theme(
+    (
+      color: mat.$green-palette,
+      typography: (
+        plain-family: (
+          system-ui,
+          sans-serif,
+        ),
+        brand-family: (
+          system-ui,
+          sans-serif,
+        ),
+      ),
+      density: 0,
+    )
+  );
+  @include mat.theme-overrides(
+    (
+      primary: #27694e,
+      on-primary: #ffffff,
+      primary-container: #eaf4ee,
+      on-primary-container: #203b33,
+      surface: #ffffff,
+      on-surface: #203b33,
+      on-surface-variant: #607169,
+      outline-variant: #e0e7e2,
+    )
+  );
+}

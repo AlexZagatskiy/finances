@@ -1,0 +1,180 @@
+<section aria-labelledby="currency-title">
+  <p class="eyebrow">A LITTLE CLARITY FOR YOUR MONEY</p>
+  <h1 id="currency-title" tabindex="-1">Currency converter</h1>
+  <p class="intro">From everyday purchases to your next trip, see what your money is worth.</p>
+
+  <div class="converter-card">
+    @if (initializing()) {
+      <p role="status" class="loading-state">Getting your currencies ready…</p>
+    } @else if (initError()) {
+      <div class="error-state" role="alert">
+        <h2>We couldn’t load the converter</h2>
+        <p>{{ initError() }}</p>
+        <button mat-stroked-button type="button" (click)="initialize()">Try again</button>
+      </div>
+    } @else {
+      <div class="card-heading">
+        <div>
+          <h2>A world of currencies. One simple tool.</h2>
+          <p>Edit either amount to convert in both directions.</p>
+        </div>
+        <mat-button-toggle-group
+          [value]="mode()"
+          (change)="setMode($event.value)"
+          aria-label="Exchange rate source"
+          hideSingleSelectionIndicator
+        >
+          <mat-button-toggle value="market">Mid-market</mat-button-toggle>
+          <mat-button-toggle value="official">Central bank</mat-button-toggle>
+        </mat-button-toggle-group>
+      </div>
+      @if (mode() === 'official') {
+        <div class="bank-row">
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <mat-label>Publishing central bank</mat-label>
+            <mat-select
+              [value]="bank()"
+              (selectionChange)="setBank($event.value)"
+              [disabled]="bankLoading() || !banks().length"
+            >
+              @for (item of banks(); track item.code) {
+                <mat-option [value]="item.code">{{ item.name }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+          <p>Official published rates. Availability depends on the selected bank.</p>
+          @if (bankLoading()) {
+            <p role="status">Loading central banks…</p>
+          }
+          @if (bankError()) {
+            <p role="alert" class="error-message">
+              {{ bankError() }}
+              <button mat-button type="button" (click)="loadBanks()">Retry bank list</button>
+            </p>
+          }
+          @if (!bank() && !bankLoading() && !bankError()) {
+            <p role="status">Choose a central bank to see its published rate.</p>
+          }
+        </div>
+      }
+      <div class="input-groups">
+        <div class="amount-group" role="group" aria-label="Source amount and currency">
+          <app-currency-selector
+            label="From currency"
+            [selected]="source()"
+            (changed)="selectCurrency('source', $event)"
+          />
+          <label class="sr-only" for="source-amount">Amount in {{ source()?.code }}</label>
+          <input
+            id="source-amount"
+            class="amount"
+            type="text"
+            inputmode="decimal"
+            autocomplete="off"
+            spellcheck="false"
+            [formControl]="sourceAmount"
+            (input)="edit('source')"
+            placeholder="0.00"
+            maxlength="32"
+            [attr.aria-invalid]="activeSide() === 'source' && !!inputError()"
+            [attr.aria-describedby]="inputError() ? 'amount-error' : 'amount-help'"
+          />
+        </div>
+        <button
+          mat-icon-button
+          class="swap-button"
+          type="button"
+          (click)="swap()"
+          aria-label="Swap source and target currencies and amounts"
+        >
+          <mat-icon svgIcon="currency" />
+        </button>
+        <div class="amount-group" role="group" aria-label="Target amount and currency">
+          <app-currency-selector
+            label="To currency"
+            [selected]="target()"
+            (changed)="selectCurrency('target', $event)"
+          />
+          <label class="sr-only" for="target-amount">Amount in {{ target()?.code }}</label>
+          <input
+            id="target-amount"
+            class="amount"
+            type="text"
+            inputmode="decimal"
+            autocomplete="off"
+            spellcheck="false"
+            [formControl]="targetAmount"
+            (input)="edit('target')"
+            placeholder="0.00"
+            maxlength="32"
+            [attr.aria-invalid]="activeSide() === 'target' && !!inputError()"
+            [attr.aria-describedby]="inputError() ? 'amount-error' : 'amount-help'"
+          />
+        </div>
+      </div>
+      <p id="amount-help" class="input-hint">
+        Use a point or comma for decimals. Results are rounded to the currency’s minor units.
+      </p>
+      @if (inputError()) {
+        <p id="amount-error" class="error-message" role="alert">{{ inputError() }}</p>
+      }
+      <div class="rate-summary" aria-live="polite" aria-atomic="true">
+        @if (busy()) {
+          <p class="updating">Updating conversion…</p>
+        }
+        @if (error()) {
+          <div class="error-state">
+            <p>{{ error() }}</p>
+            <button mat-stroked-button type="button" (click)="convert()">Try again</button>
+          </div>
+        }
+        @if (result(); as quote) {
+          <p class="rate-value">
+            1 {{ quote.source }} <span>=</span> {{ displayRate() }} {{ quote.target }}
+          </p>
+          @if (quote.identity) {
+            <p>Same currency · no exchange rate needed.</p>
+          } @else if (quote.dateOnly) {
+            <p>Published rate date: {{ quote.asOf }} · {{ bankName() }}</p>
+            @if (quote.derived) {
+              <p class="derived-note">Calculated from this bank’s published rates.</p>
+            }
+          } @else {
+            <p>
+              Last updated: {{ quote.asOf | date: 'medium' }} {{ quote.asOf | date: 'zzzz' }} ·
+              Mid-market
+            </p>
+          }
+          @if (quote.stale) {
+            <p class="stale-note">
+              Using a saved rate. The latest rate is unavailable; check its date before relying on
+              this conversion.
+            </p>
+          }
+          <span class="sr-only"
+            >Converted amount: {{ quote.result }}
+            {{ quote.side === 'source' ? quote.target : quote.source }}</span
+          >
+        }
+      </div>
+    }
+  </div>
+  <footer class="rate-attribution">
+    <p>
+      Rates by
+      <a href="https://allratestoday.com/" target="_blank" rel="noopener noreferrer"
+        >AllRatesToday<span class="sr-only"> (opens in a new tab)</span></a
+      >.
+    </p>
+    <p>
+      Conversions are indicative. Your bank or exchange provider may apply different rates, fees,
+      and spreads.
+    </p>
+    @if (mode() === 'official') {
+      <p>
+        Official rates are published by the selected central bank and served by AllRatesToday.
+        Publication dates may precede today on weekends and holidays.
+      </p>
+    }
+  </footer>
+</section>

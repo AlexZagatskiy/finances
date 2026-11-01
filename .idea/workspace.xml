@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="f383a607-6736-41e5-b4c1-eaf82f8ca472" name="Changes" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="EmbeddingIndexingInfo">
+    <option name="cachedIndexableFilesCount" value="67" />
+    <option name="fileBasedEmbeddingIndicesEnabled" value="true" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="McpProjectServerCommands">
+    <commands>
+      <McpServerConfigurationProperties>
+        <option name="allowedToolsNames" />
+        <option name="enabled" value="true" />
+        <option name="name" value="angular-cli" />
+        <option name="source" value="USER" />
+        <option name="userOverride" value="false" />
+      </McpServerConfigurationProperties>
+    </commands>
+    <urls>
+      <McpServerConfigurationProperties>
+        <option name="allowedToolsNames" />
+        <option name="enabled" value="true" />
+        <option name="name" value="allratestoday" />
+        <option name="source" value="USER" />
+        <option name="userOverride" value="false" />
+      </McpServerConfigurationProperties>
+    </urls>
+  </component>
+  <component name="NextEditCompletionFeaturesState">
+    <decayedCancelled>
+      <entry key="MS100" value="1.0000386970650963" />
+      <entry key="MS500" value="1.390071196357972" />
+      <entry key="S2" value="6.265447096161313" />
+      <entry key="S5" value="13.002862945415869" />
+      <entry key="S10" value="17.445922356521077" />
+      <entry key="S30" value="21.770559088430083" />
+      <entry key="S60" value="28.643866698223018" />
+      <entry key="M2" value="54.66230441776691" />
+      <entry key="M5" value="115.09302382734404" />
+      <entry key="M10" value="177.2546751047305" />
+      <entry key="M15" value="251.5423477512375" />
+      <entry key="M30" value="561.0145561671208" />
+      <entry key="H1" value="1184.1799230709416" />
+      <entry key="H2" value="1957.8386135358892" />
+      <entry key="H4" value="2611.149596471251" />
+      <entry key="D1" value="3382.864816966758" />
+      <entry key="W1" value="3542.49803581407" />
+    </decayedCancelled>
+    <decayedSelected>
+      <entry key="MS100" value="0.0" />
+      <entry key="MS500" value="0.0" />
+      <entry key="S2" value="1.2628287464092825E-116" />
+      <entry key="S5" value="4.3705670148963825E-47" />
+      <entry key="S10" value="6.6110264066152204E-24" />
+      <entry key="S30" value="1.8768214744292233E-8" />
+      <entry key="S60" value="1.369971340732802E-4" />
+      <entry key="M2" value="0.011704577483757353" />
+      <entry key="M5" value="0.16878828341032429" />
+      <entry key="M10" value="0.41083851256950715" />
+      <entry key="M15" value="0.5526465104628415" />
+      <entry key="M30" value="0.7434019844356371" />
+      <entry key="H1" value="0.8622076225803363" />
+      <entry key="H2" value="0.9285513569966589" />
+      <entry key="H4" value="0.9636136969743893" />
+      <entry key="D1" value="0.9938415756510182" />
+      <entry key="W1" value="0.9991178941898796" />
+    </decayedSelected>
+    <decayedShown>
+      <entry key="MS100" value="0.9460945401086152" />
+      <entry key="MS500" value="1.375620351796761" />
+      <entry key="S2" value="6.248288111899202" />
+      <entry key="S5" value="12.986383021501249" />
+      <entry key="S10" value="17.43420139729375" />
+      <entry key="S30" value="21.765483789156836" />
+      <entry key="S60" value="28.640521774352646" />
+      <entry key="M2" value="54.669950134144045" />
+      <entry key="M5" value="115.25643861599065" />
+      <entry key="M10" value="177.6606133633486" />
+      <entry key="M15" value="252.09072386074766" />
+      <entry key="M30" value="561.7546551868412" />
+      <entry key="H1" value="1185.039588435478" />
+      <entry key="H2" value="1958.765381735378" />
+      <entry key="H4" value="2612.112107626907" />
+      <entry key="D1" value="3383.8584337253874" />
+      <entry key="W1" value="3543.4971203841787" />
+    </decayedShown>
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 7,
+  &quot;fromUser&quot;: false
+}</component>
+  <component name="ProjectId" id="3LVsMHOxw84aAJtLQqtjFP3G8SY" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;KEY_CHAT_IN_TOOLWINDOW&quot;: &quot;false&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
+    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;javascript.preferred.runtime.type.id&quot;: &quot;node&quot;,
+    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;ml.llm.mcp&quot;,
+    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;/Users/oleksii/projects/finances/node_modules/typescript/lib&quot;
+  }
+}</component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-4abd2a77f808-JavaScript-WS-262.10968.77" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="f383a607-6736-41e5-b4c1-eaf82f8ca472" name="Changes" comment="" />
+      <created>1793550520838</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1793550520838</updated>
+      <workItem from="1793550522127" duration="8848000" />
+      <workItem from="1793561594568" duration="743000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>

@@ -1,0 +1,45 @@
+@import 'tailwindcss' prefix(tw);
+
+:root {
+  color-scheme: light;
+  --app-background: #f8faf8;
+  --app-surface: #ffffff;
+  --app-ink: #203b33;
+  --app-muted: #607169;
+  --app-border: #e0e7e2;
+  --app-accent: #27694e;
+  --app-accent-soft: #eaf4ee;
+}
+html,
+body {
+  min-height: 100%;
+}
+body {
+  margin: 0;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  background: var(--app-background);
+  color: var(--app-ink);
+}
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+/* Center icons independently of the inherited text line-height. */
+.mat-mdc-icon-button.mat-mdc-button-base {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+:focus-visible {
+  outline: 3px solid var(--app-accent);
+  outline-offset: 4px;
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
