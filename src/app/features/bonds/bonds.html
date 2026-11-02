@@ -1,0 +1,164 @@
+<section aria-labelledby="bonds-title">
+  <p class="data-date tw:mt-4">
+    Bond data updated:
+    {{ verifiedDate ? (verifiedDate | date: 'longDate') : 'Unknown — invalid verification date' }}
+    @if (config; as data) {
+      · Offering: {{ data.offerMonth }}
+    }
+    ·
+    <a href="https://www.obligacjeskarbowe.pl/oferta/" target="_blank" rel="noopener noreferrer"
+      >Official offer (opens in a new tab)</a
+    >
+  </p>
+  @if (freshnessWarning) {
+    <div class="warning tw:mt-4" role="alert">
+      <h2>Bond data may be outdated</h2>
+      <p>{{ freshnessWarning }}</p>
+    </div>
+  }
+  @if (configError) {
+    <div class="warning tw:mt-6" role="alert">
+      <h2>Unable to load bond definitions</h2>
+      <p>{{ configError }}</p>
+    </div>
+  }
+  @if (config; as data) {
+    <mat-card appearance="outlined" class="calculator-card tw:mt-8">
+      <mat-card-content>
+        <form [formGroup]="form" (ngSubmit)="calculate()">
+          <mat-form-field appearance="outline" class="amount-field">
+            <mat-label>Investment amount (PLN)</mat-label>
+            <input
+              matInput
+              type="number"
+              min="0.01"
+              max="1000000000"
+              step="0.01"
+              formControlName="investmentAmount"
+            />
+            <mat-hint>Whole bonds only. Unused cash stays in your portfolio.</mat-hint>
+            <mat-error>Enter a positive PLN amount, up to 1 billion.</mat-error>
+          </mat-form-field>
+          <div class="duration tw:mt-8">
+            <label for="duration"
+              >Investment duration: {{ form.controls.durationYears.value }} years</label
+            >
+            <mat-slider min="1" max="12" step="1" discrete>
+              <input
+                id="duration"
+                matSliderThumb
+                formControlName="durationYears"
+                aria-label="Investment duration in years"
+              />
+            </mat-slider>
+            <div class="range-labels"><span>1 year</span><span>12 years</span></div>
+          </div>
+          <mat-accordion class="tw:mt-6 tw:block">
+            <mat-expansion-panel>
+              <mat-expansion-panel-header
+                ><mat-panel-title>More settings</mat-panel-title></mat-expansion-panel-header
+              >
+              <p class="help tw:mb-5">
+                Future inflation and NBP rates are illustrative assumptions, not guaranteed
+                forecasts. Rates between 0% and 100% are supported.
+              </p>
+              <div class="tw:grid tw:gap-4 tw:md:grid-cols-3">
+                @for (field of rateFields; track field.key) {
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{ field.label }}</mat-label>
+                    <input
+                      matInput
+                      type="number"
+                      min="0"
+                      max="100"
+                      step="0.01"
+                      [formControlName]="field.key"
+                    />
+                    <mat-error>Enter a rate from 0% to 100%.</mat-error>
+                  </mat-form-field>
+                }
+              </div>
+              <mat-checkbox formControlName="includeFamilyBonds"
+                >Include Family 800+ bonds</mat-checkbox
+              >
+              <p class="help">
+                Enable only if eligible. Your benefit-based purchase entitlement is not checked.
+              </p>
+            </mat-expansion-panel>
+          </mat-accordion>
+          @if (error()) {
+            <p class="error tw:mt-5" role="alert">{{ error() }}</p>
+          }
+          @if (needsRecalculation()) {
+            <p class="help tw:mt-5" role="status">
+              Inputs changed. Calculate again to update your comparison.
+            </p>
+          }
+          <button mat-flat-button type="submit" class="tw:mt-6">Calculate returns</button>
+        </form>
+      </mat-card-content>
+    </mat-card>
+    <section class="tw:mt-8" aria-label="Comparison results" aria-live="polite">
+      <p class="help">
+        Only bonds with a maturity equal to or longer than your selected investment duration are
+        compared.
+      </p>
+      @if (results(); as cards) {
+        <h2 class="tw:mt-5">Your projected returns</h2>
+        @if (cards.length) {
+          <p class="help tw:mt-2">
+            Ranked by net profit after tax and fees. Scroll horizontally to compare.
+          </p>
+          <div
+            class="results-row tw:flex tw:gap-5 tw:overflow-x-auto tw:py-5"
+            tabindex="0"
+            role="region"
+            aria-label="Ranked bond comparison cards"
+          >
+            @for (card of cards; track card.series; let first = $first) {
+              <app-bond-result-card [result]="card" [best]="first" />
+            }
+          </div>
+        } @else {
+          <p class="empty-state tw:mt-5" role="status">
+            No bonds qualify for this horizon and eligibility. Choose a shorter duration, or include
+            Family 800+ bonds if you are eligible.
+          </p>
+        }
+      }
+    </section>
+    <aside class="assumptions tw:mt-8" aria-label="Calculation assumptions and limitations">
+      <h2>Estimates, with the assumptions in view</h2>
+      <p>
+        Interest follows each bond’s configured capitalization and payout schedule. Net paid coupons
+        are held as cash earning 0%. Principal is never reinvested after maturity.
+      </p>
+      <p>
+        We use equal-month accrual, per-bond interest rounded to the nearest grosz at capitalization
+        or payout, and positive tax rounded up to a grosz at payout or redemption. Early redemption
+        estimates cap the configured PLN fee at unpaid interest, including capitalized interest,
+        before tax. Exact emission-specific limits are unavailable.
+      </p>
+      <p>
+        Annualized return uses the whole portfolio, including unused cash and paid coupons held to
+        the selected horizon. Standard purchase prices apply; exchange discounts are not assumed.
+      </p>
+      <ul>
+        @for (note of data.limitations; track note) {
+          <li>{{ note }}</li>
+        }
+      </ul>
+      <p>These are financial estimates, not authoritative settlement amounts.</p>
+      <p>Stored data sources:</p>
+      <ul>
+        @for (source of data.sources; track source) {
+          <li>
+            <a [href]="source" target="_blank" rel="noopener noreferrer"
+              >{{ source }} (opens in a new tab)</a
+            >
+          </li>
+        }
+      </ul>
+    </aside>
+  }
+</section>

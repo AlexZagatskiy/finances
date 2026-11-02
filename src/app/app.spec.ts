@@ -22,13 +22,15 @@ describe('Feature navigation', () => {
   it.each([
     ['/currency', 'Currency converter'],
     ['/mortgage', 'Mortgage calculator'],
-    ['/bonds', 'Bonds calculator'],
+    ['/bonds', 'Polish Treasury Bonds Calculator'],
   ])('opens the lazy route %s with its own title and placeholder', async (path, title) => {
     const harness = await RouterTestingHarness.create(path);
     expect(harness.routeNativeElement?.querySelector('h1')?.textContent).toBe(title);
-    if (path !== '/currency')
+    if (path === '/mortgage')
       expect(harness.routeNativeElement?.textContent).toContain('Coming soon');
-    expect(TestBed.inject(Title).getTitle()).toBe(`${title} | Finances`);
+    expect(TestBed.inject(Title).getTitle()).toBe(
+      `${path === '/bonds' ? 'Bonds calculator' : title} | Finances`,
+    );
   });
 
   it.each(['/', '/unknown-page'])('redirects %s to the currency page', async (path) => {

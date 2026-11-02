@@ -8,6 +8,13 @@
         "mcp"
       ]
     },
+    "tailwindcss": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@clarity-contrib/tailwindcss-mcp-server@1.1.1"
+      ]
+    },
     "allratestoday": {
       "url": "https://allratestoday.com/api/mcp"
     }

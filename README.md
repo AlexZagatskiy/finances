@@ -79,3 +79,17 @@ The official Angular CLI MCP is required for Angular development by AGENTS.md, c
 ```
 
 See [Angular MCP documentation](https://angular.dev/ai/mcp). The iteration scope is recorded in [ITERATION-1.md](ITERATION-1.md).
+
+## Tailwind CSS MCP
+
+The shared [MCP configuration](.ai/mcp/mcp.json) includes the community-maintained
+[@clarity-contrib/tailwindcss-mcp-server](https://github.com/clarity-contrib/tailwindcss-mcp-server),
+pinned to version 1.1.1. It provides utility lookup, documentation search, and CSS-to-Tailwind conversion
+with Tailwind v4 support. It is not an official Tailwind Labs server.
+
+In WebStorm's AI Assistant MCP settings, enable the server from the project configuration (or import
+the configuration if it is not loaded automatically), then start a new agent session to expose its tools.
+The server runs through `npx`, requires network access on first launch, and needs no API key.
+Use the project's supported Node.js version from Local development above.
+
+Request `version: "v4"` when using its tools, and adapt returned classes to this project's `tw:` prefix.
