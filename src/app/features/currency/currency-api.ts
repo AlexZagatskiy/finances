@@ -82,7 +82,7 @@ export class CurrencyApi {
     this.loading.set(true);
     this.error.set('');
     this.http
-      .get<{ currencies: CurrencyInfo[] }>('/api/currencies')
+      .get<{ currencies: CurrencyInfo[] }>(`${this.apiBaseUrl}/api/currencies`)
       .pipe(
         finalize(() => this.loading.set(false)),
         takeUntilDestroyed(this.destroyRef),
