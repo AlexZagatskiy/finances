@@ -20,7 +20,7 @@ import { CurrencyApi, CurrencyInfo } from './currency-api';
       (click)="open()"
     >
       @if (selected()?.flag; as flag) {
-        <img class="flag" [src]="'/flags/' + flag + '.svg'" alt="" width="24" height="18" />
+        <img class="flag" [src]="'flags/' + flag + '.svg'" alt="" width="24" height="18" />
       } @else {
         <span class="neutral-flag" aria-hidden="true">¤</span>
       }
@@ -82,7 +82,7 @@ import { CurrencyApi, CurrencyInfo } from './currency-api';
                   @if (currency.flag) {
                     <img
                       class="tw:ml-1 flag"
-                      [src]="'/flags/' + currency.flag + '.svg'"
+                      [src]="'flags/' + currency.flag + '.svg'"
                       alt=""
                       width="24"
                       height="18"

@@ -36,6 +36,7 @@ const text = (value: unknown): string => {
     );
   return value;
 };
+
 export class RateProvider {
   private cache: Cache;
   private options: ProviderOptions;
@@ -53,7 +54,7 @@ export class RateProvider {
       throw new ServiceError(
         503,
         'NOT_CONFIGURED',
-        'Exchange rates are not configured yet. Please try again later.',
+        'Exchange rates are not configured yet. Please try again later.' + this.options.apiKey,
       );
     if (authenticated && this.now() < this.quotaUntil)
       throw new ServiceError(
