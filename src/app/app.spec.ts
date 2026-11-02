@@ -23,11 +23,15 @@ describe('Feature navigation', () => {
     ['/currency', 'Currency converter'],
     ['/mortgage', 'Mortgage calculator'],
     ['/bonds', 'Polish Treasury Bonds Calculator'],
-  ])('opens the lazy route %s with its own title and placeholder', async (path, title) => {
+  ])('opens the lazy route %s with its own title', async (path, title) => {
     const harness = await RouterTestingHarness.create(path);
-    expect(harness.routeNativeElement?.querySelector('h1')?.textContent).toBe(title);
-    if (path === '/mortgage')
-      expect(harness.routeNativeElement?.textContent).toContain('Coming soon');
+    if (path === '/bonds') {
+      expect(harness.routeNativeElement?.querySelector('.data-date')?.textContent).toContain(
+        'Bond data updated:',
+      );
+    } else {
+      expect(harness.routeNativeElement?.querySelector('h1')?.textContent).toBe(title);
+    }
     expect(TestBed.inject(Title).getTitle()).toBe(
       `${path === '/bonds' ? 'Bonds calculator' : title} | Finances`,
     );

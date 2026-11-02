@@ -1,0 +1,361 @@
+<section aria-labelledby="mortgage-title">
+  <p class="eyebrow">A LITTLE CLARITY FOR YOUR NEXT HOME</p>
+  <h1 id="mortgage-title" tabindex="-1">Mortgage calculator</h1>
+  <p class="intro tw:mt-4">
+    Explore your monthly budget and compare equal and decreasing installments for a PLN mortgage.
+  </p>
+  <mat-card appearance="outlined" class="calculator-card tw:mt-8">
+    <mat-card-content>
+      <form [formGroup]="form" (ngSubmit)="calculate()">
+        <div class="tw:grid tw:gap-5 tw:md:grid-cols-3">
+          <mat-form-field appearance="outline">
+            <mat-label>Property / project price (PLN)</mat-label>
+            <input
+              matInput
+              type="number"
+              min=".01"
+              max="1000000000"
+              step=".01"
+              formControlName="propertyPrice"
+            />
+            <mat-hint>Total investment before subtracting your own contribution.</mat-hint>
+            <mat-error>Enter a positive property price, up to 1 billion PLN.</mat-error>
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Own contribution (PLN)</mat-label>
+            <input
+              matInput
+              type="number"
+              min="0"
+              max="1000000000"
+              step=".01"
+              formControlName="ownContribution"
+            />
+            <mat-hint>Your own capital toward the property, excluding fees.</mat-hint>
+            <mat-error>Enter a nonnegative PLN amount.</mat-error>
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Own contribution (%)</mat-label>
+            <input
+              matInput
+              type="number"
+              min="0"
+              max="100"
+              step=".01"
+              formControlName="ownContributionPercent"
+            />
+            <mat-hint>Percentage of the total property / project price.</mat-hint>
+            <mat-error>Enter a percentage from 0% to 100%.</mat-error>
+          </mat-form-field>
+        </div>
+        <p class="help tw:mt-4">
+          Amount and percentage update each other. Changing the property price preserves the
+          contribution field you edited last. PLN amounts round to the nearest grosz.
+        </p>
+        @if (financing().valid) {
+          <div class="financing tw:mt-6" aria-live="polite">
+            <p>
+              Mortgage amount <strong>{{ money(financing().loan) }}</strong>
+            </p>
+            <p>
+              Own contribution {{ financing().contributionPercent | number: '1.1-1' }}% ·
+              Loan-to-value (LTV) {{ financing().ltv | number: '1.1-1' }}%
+            </p>
+          </div>
+        }
+        <div class="duration tw:mt-6">
+          <label for="mortgage-duration"
+            >Mortgage duration: {{ form.controls.durationYears.value }} years</label
+          >
+          <mat-slider min="1" max="35" step="1" discrete>
+            <input
+              id="mortgage-duration"
+              matSliderThumb
+              formControlName="durationYears"
+              aria-label="Mortgage duration in years"
+            />
+          </mat-slider>
+          <div class="range-labels"><span>1 year</span><span>35 years</span></div>
+        </div>
+        <div class="tw:grid tw:gap-5 tw:md:grid-cols-2 tw:mt-6">
+          <mat-form-field appearance="outline">
+            <mat-label>Interest scenario</mat-label>
+            <mat-select formControlName="rateMode">
+              <mat-option value="initial-fixed">Initial fixed period, then assumed rate</mat-option>
+              <mat-option value="constant">One assumed rate throughout</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>{{
+              form.controls.rateMode.value === 'initial-fixed'
+                ? 'Initial annual interest (%)'
+                : 'Annual interest (%)'
+            }}</mat-label>
+            <input
+              matInput
+              type="number"
+              min="0"
+              max="100"
+              step=".01"
+              formControlName="annualRate"
+            />
+            <mat-hint>Nominal annual interest including bank margin. Do not enter RRSO.</mat-hint>
+            <mat-error>Enter an interest rate from 0% to 100%.</mat-error>
+          </mat-form-field>
+        </div>
+        @if (form.controls.rateMode.value === 'initial-fixed') {
+          <div class="tw:grid tw:gap-5 tw:md:grid-cols-2 tw:mt-6">
+            <mat-form-field appearance="outline">
+              <mat-label>Initial fixed period (years)</mat-label>
+              <input
+                matInput
+                type="number"
+                min="1"
+                [max]="form.controls.durationYears.value"
+                step="1"
+                formControlName="fixedPeriodYears"
+              />
+              <mat-error>Enter whole years within the mortgage duration.</mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Annual interest after fixed period (%)</mat-label>
+              <input
+                matInput
+                type="number"
+                min="0"
+                max="100"
+                step=".01"
+                formControlName="laterAnnualRate"
+              />
+              <mat-error>Enter an interest rate from 0% to 100%.</mat-error>
+            </mat-form-field>
+          </div>
+        }
+        <p class="help tw:mt-4">
+          All defaults are illustrative assumptions, not bank offers. A constant scenario can
+          approximate a variable rate held unchanged; it is not a promise of fixed interest for the
+          whole mortgage. After an initial fixed period, the assumed rate applies for the remaining
+          term.
+        </p>
+        <mat-accordion class="tw:block tw:mt-6">
+          <mat-expansion-panel>
+            <mat-expansion-panel-header
+              ><mat-panel-title
+                >More settings — fees and insurance</mat-panel-title
+              ></mat-expansion-panel-header
+            >
+            <div class="tw:grid tw:gap-4 tw:md:grid-cols-3">
+              @for (field of costFields; track field.key) {
+                <mat-form-field appearance="outline">
+                  <mat-label>{{ field.label }}</mat-label>
+                  <input
+                    matInput
+                    type="number"
+                    min="0"
+                    [max]="field.max"
+                    [step]="field.step"
+                    [formControlName]="field.key"
+                  />
+                  <mat-error>Enter a value from 0 to {{ field.max | number }}.</mat-error>
+                </mat-form-field>
+              }
+            </div>
+            <p class="help">
+              Commission is a percentage of the mortgage, paid upfront. Add valuation and other
+              one-off costs separately. Monthly costs can cover insurance or account fees and apply
+              throughout the mortgage. Costs default to zero: enter the amounts from your offer.
+              Fees are not financed.
+            </p>
+          </mat-expansion-panel>
+        </mat-accordion>
+        @if (error()) {
+          <p role="alert" class="error tw:mt-5">{{ error() }}</p>
+        }
+        @if (needsRecalculation()) {
+          <p role="status" class="help tw:mt-5">
+            Inputs changed. Calculate again to update your comparison.
+          </p>
+        }
+        <button mat-flat-button type="submit" class="tw:mt-6">Calculate mortgage</button>
+      </form>
+    </mat-card-content>
+  </mat-card>
+  <section aria-live="polite" aria-label="Mortgage comparison" class="tw:mt-8">
+    @if (results(); as cards) {
+      <h2>Two ways to repay your mortgage</h2>
+      <p class="help tw:mt-2">
+        Compare the starting budget and total cost. Monthly figures include your additional costs.
+      </p>
+      <div class="tw:grid tw:gap-5 tw:md:grid-cols-2 tw:mt-5">
+        @for (card of cards; track card.type) {
+          <mat-card
+            appearance="outlined"
+            class="result-card"
+            [attr.data-installment-type]="card.type"
+          >
+            <mat-card-content>
+              <h3>
+                {{ card.type === 'equal' ? 'Equal installments' : 'Decreasing installments' }}
+              </h3>
+              <p class="help">
+                {{
+                  card.type === 'equal'
+                    ? 'Raty równe · payment stays level within each assumed rate period, apart from rounding.'
+                    : 'Raty malejące · equal principal portions plus interest on the remaining balance.'
+                }}
+              </p>
+              <p class="metric-label tw:mt-6">First monthly payment</p>
+              <p class="payment">{{ money(card.firstPayment) }}</p>
+              <dl>
+                <div>
+                  <dt>Highest monthly payment</dt>
+                  <dd>{{ money(card.highestPayment) }}</dd>
+                </div>
+                <div>
+                  <dt>Last monthly payment</dt>
+                  <dd>{{ money(card.lastPayment) }}</dd>
+                </div>
+                @if (card.paymentAfterRateChange !== null) {
+                  <div>
+                    <dt>Payment after fixed period</dt>
+                    <dd>{{ money(card.paymentAfterRateChange!) }}</dd>
+                  </div>
+                }
+                <div>
+                  <dt>Total interest</dt>
+                  <dd>{{ money(card.totalInterest) }}</dd>
+                </div>
+                <div>
+                  <dt>Bank commission</dt>
+                  <dd>{{ money(card.commission) }}</dd>
+                </div>
+                <div>
+                  <dt>Other upfront costs</dt>
+                  <dd>{{ money(card.upfrontCosts) }}</dd>
+                </div>
+                <div>
+                  <dt>Total monthly additional costs</dt>
+                  <dd>{{ money(card.recurringCosts) }}</dd>
+                </div>
+                <div class="total">
+                  <dt>Total borrowing cost</dt>
+                  <dd>{{ money(card.totalBorrowingCost) }}</dd>
+                </div>
+                <div>
+                  <dt>Total loan outlay, including costs</dt>
+                  <dd>{{ money(card.totalLoanPayments) }}</dd>
+                </div>
+                <div>
+                  <dt>Initial cash: contribution + upfront fees</dt>
+                  <dd>{{ money(card.initialCashNeeded) }}</dd>
+                </div>
+                <div>
+                  <dt>Total project outlay, including own capital</dt>
+                  <dd>{{ money(card.totalProjectOutlay) }}</dd>
+                </div>
+              </dl>
+            </mat-card-content>
+          </mat-card>
+        }
+      </div>
+      <mat-accordion class="tw:block tw:mt-6">
+        <mat-expansion-panel>
+          <mat-expansion-panel-header
+            ><mat-panel-title
+              >Monthly repayment schedule</mat-panel-title
+            ></mat-expansion-panel-header
+          >
+          <ng-template matExpansionPanelContent>
+            <mat-button-toggle-group
+              [value]="selectedSchedule()"
+              (change)="selectedSchedule.set($event.value)"
+              aria-label="Repayment schedule type"
+            >
+              <mat-button-toggle value="equal">Equal</mat-button-toggle>
+              <mat-button-toggle value="decreasing">Decreasing</mat-button-toggle>
+            </mat-button-toggle-group>
+            <div
+              class="schedule tw:overflow-x-auto tw:mt-5"
+              tabindex="0"
+              role="region"
+              aria-label="Monthly mortgage repayment table"
+            >
+              <table>
+                <caption>
+                  {{
+                    selectedSchedule() === 'equal' ? 'Equal' : 'Decreasing'
+                  }}
+                  installments · all amounts in PLN
+                </caption>
+                <thead>
+                  <tr>
+                    <th scope="col">Month</th>
+                    <th scope="col">Rate</th>
+                    <th scope="col">Principal</th>
+                    <th scope="col">Interest</th>
+                    <th scope="col">Installment</th>
+                    <th scope="col">Other costs</th>
+                    <th scope="col">Total payment</th>
+                    <th scope="col">Balance</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (row of schedule(); track row.month) {
+                    <tr>
+                      <th scope="row">{{ row.month }}</th>
+                      <td>{{ row.annualRate * 100 | number: '1.2-2' }}%</td>
+                      <td>{{ row.principal | number: '1.2-2' }}</td>
+                      <td>{{ row.interest | number: '1.2-2' }}</td>
+                      <td>{{ row.installment | number: '1.2-2' }}</td>
+                      <td>{{ row.additionalCosts | number: '1.2-2' }}</td>
+                      <td>{{ row.totalPayment | number: '1.2-2' }}</td>
+                      <td>{{ row.closingBalance | number: '1.2-2' }}</td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          </ng-template>
+        </mat-expansion-panel>
+      </mat-accordion>
+    }
+  </section>
+  <aside class="assumptions tw:mt-8" aria-label="Mortgage calculation assumptions">
+    <h2>Keep the assumptions in view</h2>
+    <p>
+      Property price minus own contribution determines the loan. Both installment plans use the same
+      amount, duration and interest scenario. Equal installments are recalculated on the remaining
+      balance and remaining term when the assumed rate changes. Decreasing installments keep the
+      same principal portion.
+    </p>
+    <p>
+      Interest uses the outstanding balance × annual nominal rate ÷ 12, rounded to a grosz monthly.
+      The final payment adjusts for rounding. Actual bank day counts and settlement amounts may
+      differ. This is a budget estimate, not a bank quote, creditworthiness assessment or RRSO
+      calculation.
+    </p>
+    <p>
+      Insurance may change or apply for only part of the term; this calculator uses the constant
+      monthly cost you enter. Construction tranches, grace periods, subsidies and overpayments are
+      not modeled. LTV is informational and does not establish eligibility or a required minimum
+      contribution.
+    </p>
+    <p>
+      For your offer, check the interest and margin, fixed period, fees, insurance and account
+      conditions. Bank product examples reviewed on 2 November 2026:
+      <a
+        href="https://www.pkobp.pl/klient-indywidualny/kredyty-pozyczki/kredyt-hipoteczny"
+        target="_blank"
+        rel="noopener noreferrer"
+        >PKO Bank Polski (opens in a new tab)</a
+      >
+      and
+      <a
+        href="https://www.ing.pl/indywidualni/kredyty-i-pozyczki/kredyt-hipoteczny"
+        target="_blank"
+        rel="noopener noreferrer"
+        >ING (opens in a new tab)</a
+      >. Rates are entered by you; no offers are downloaded.
+    </p>
+  </aside>
+</section>

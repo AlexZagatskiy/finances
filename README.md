@@ -63,6 +63,14 @@ All application JavaScript is prefetched by the production service worker, inclu
 
 Production hosting must use HTTPS and serve `index.html` for application routes. Serve missing asset files as 404 responses. Localhost is accepted as a secure context for development. The included preview server binds only to the local machine and is not intended for deployment.
 
+### App updates
+
+Installed apps can remain open on a cached release after a deployment. The app checks for updates after startup stabilizes, whenever it returns to the foreground or reconnects, and every 15 minutes while visible. Once the new release has downloaded, a **Reload to update** notice appears. Reloading switches all app files together and clears current calculator inputs. Offline use continues with the cached release; failed checks retry later.
+
+Angular generates `ngsw.json` with content hashes during each production build, so manual cache version bumps or clearing all caches are unnecessary. Deploy the entire production build together, including `ngsw.json` and `ngsw-worker.js`. On hosts with configurable headers, require revalidation (`Cache-Control: no-cache`) for these two files and `index.html`; hashed JavaScript and CSS can be cached long-term. The current GitHub Pages workflow deploys a complete build artifact and does not support custom response headers.
+
+To verify updates, keep production preview open and controlled by its service worker, change some visible text, and build again. Return to the preview after switching away: the update notice should appear once the new release finishes downloading. Choose **Reload to update** and verify the changed text and route navigation. Check offline navigation again after the update. For an installation made before this update flow existed, fully close all app windows and reopen online, allow the new release to download, then close and reopen once more to pick it up.
+
 ## Angular MCP
 
 The official Angular CLI MCP is required for Angular development by AGENTS.md, configured through your IDE, with this project as its working directory:
