@@ -17,8 +17,8 @@ export interface BankInfo {
   country?: string | null;
 }
 export interface Bootstrap {
-  source: string;
-  target: string;
+  source?: string | null;
+  target?: string | null;
   bank: string | null;
   country: string | null;
   currencies: CurrencyInfo[];

@@ -145,12 +145,12 @@ export function defaults(countryCode?: string) {
     country?.cca2 === 'BG'
       ? 'EUR'
       : country
-        ? (Object.keys(country.currencies)[0] ?? 'USD')
-        : 'USD';
+        ? (Object.keys(country.currencies)[0] ?? 'PLN')
+        : 'PLN';
   return {
     country: country?.cca2 ?? null,
     source,
     target: source === 'USD' ? 'EUR' : 'USD',
-    bank: countryBanks[country?.cca2 ?? ''] ?? (source === 'EUR' ? 'ecb' : country ? null : 'fed'),
+    bank: countryBanks[country?.cca2 ?? ''] ?? (source === 'EUR' ? 'ecb' : country ? null : 'nbp'),
   };
 }

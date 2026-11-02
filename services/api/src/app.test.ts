@@ -161,12 +161,12 @@ test('country defaults: Poland, US, Eurozone and unknown', () => {
   assert.deepEqual(defaults('PL'), { country: 'PL', source: 'PLN', target: 'USD', bank: 'nbp' });
   assert.equal(defaults('US').target, 'EUR');
   assert.equal(defaults('DE').bank, 'ecb');
-  assert.equal(defaults().source, 'USD');
-  assert.equal(defaults().target, 'EUR');
+  assert.equal(defaults().source, 'PLN');
+  assert.equal(defaults().target, 'USD');
 });
 test('only explicitly configured country headers influence defaults', async (t) => {
   const f = fixture();
   t.after(() => f.app.close());
   const response = await f.app.inject({ url: '/api/bootstrap', headers: { 'cf-ipcountry': 'PL' } });
-  assert.equal(response.json().source, 'USD');
+  assert.equal(response.json().source, 'PLN');
 });

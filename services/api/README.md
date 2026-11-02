@@ -27,7 +27,7 @@ Conversion responses contain decimal strings (`rate`, `result`, `exactResult`), 
 
 Country detection uses a country header supplied by your hosting platform. Set `TRUSTED_COUNTRY_HEADER=cf-ipcountry` for a Cloudflare deployment, or your platform's equivalent. Enable this only behind a proxy that overwrites the header and prevents direct public access to the origin. It is disabled by default; arbitrary client headers do not influence defaults. `DEFAULT_COUNTRY=PL` is available for local testing. No precise coordinates are requested or stored.
 
-Unknown location/currency falls back to USD → EUR. Other detected currencies target USD. The publishing bank is initialized from the detected country; when none is covered, the UI asks the user to choose. Changing currencies or swapping does not change the bank.
+Unknown location/currency falls back to PLN → USD. Detected USD targets EUR. Other detected currencies target USD. The publishing bank is initialized from the detected country; when none is covered, the UI asks the user to choose. Changing currencies or swapping does not change the bank.
 
 In production, route `/api/*` to this service and other requests to the built Angular app under the same HTTPS origin. The included Angular proxy is development-only. The local preview script also forwards `/api/*` to `127.0.0.1:3001`; it is not a production server. Set `API_HOST=0.0.0.0` only when needed by a container or hosting platform. Keep the API key in the host's secret store, outside the frontend build and git.
 

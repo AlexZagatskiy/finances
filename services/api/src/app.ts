@@ -78,8 +78,8 @@ export function buildApp(options: AppOptions = {}) {
     const currencies = await provider.currencies();
     const supported = new Set(currencies.map((c) => c.code));
     if (!supported.has(selected.source)) {
-      selected.source = 'USD';
-      selected.target = 'EUR';
+      selected.source = 'PLN';
+      selected.target = 'USD';
     }
     return {
       ...selected,

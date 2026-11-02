@@ -83,8 +83,26 @@ export class Currency implements OnInit {
         next: (data) => {
           this.api.currencies.set(data.currencies);
           this.api.popularCodes.set(data.popularCodes);
-          this.source.set(data.currencies.find((c) => c.code === data.source));
-          this.target.set(data.currencies.find((c) => c.code === data.target));
+          const sourceCode = data.source || 'PLN';
+          const targetCode = data.target || (sourceCode === 'USD' ? 'EUR' : 'USD');
+          this.source.set(
+            data.currencies.find((c) => c.code === sourceCode) ?? {
+              code: 'PLN',
+              name: 'Polish złoty',
+              symbol: 'zł',
+              flag: 'pl',
+              digits: 2,
+            },
+          );
+          this.target.set(
+            data.currencies.find((c) => c.code === targetCode) ?? {
+              code: 'USD',
+              name: 'US Dollar',
+              symbol: '$',
+              flag: 'us',
+              digits: 2,
+            },
+          );
           this.country = data.country;
           this.bank.set(data.bank);
           this.initializing.set(false);
