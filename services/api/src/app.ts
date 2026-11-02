@@ -4,6 +4,7 @@ import { Decimal } from 'decimal.js';
 import { RateProvider, type ProviderOptions } from './provider.ts';
 import { ServiceError } from './cache.ts';
 import { defaults, popularCodes } from './metadata.ts';
+import cors from '@fastify/cors';
 
 // 40 significant digits avoids binary floating point and repeated display rounding.
 const Money = Decimal.clone({ precision: 40, rounding: Decimal.ROUND_HALF_UP });
@@ -21,9 +22,25 @@ interface AppOptions extends ProviderOptions {
   logger?: boolean;
 }
 
+const defaultOrigins = [
+  'http://localhost:4200',
+];
+
+const allowedOrigins = process.env.CORS_ORIGINS
+  ? process.env.CORS_ORIGINS.split(',').map((o) => o.trim()).filter(Boolean)
+  : defaultOrigins;
+
 export function buildApp(options: AppOptions = {}) {
   const app = Fastify({ logger: options.logger ?? false, bodyLimit: 2048 });
   const provider = new RateProvider(options);
+
+  app.register(cors, {
+    origin: allowedOrigins,
+    methods: ['GET', 'POST', 'OPTIONS'],
+    allowedHeaders: ['Content-Type'],
+    maxAge: 86400, // browsers cache the preflight result for 24h
+  });
+
   app.register(rateLimit, { max: 120, timeWindow: '1 minute' });
   app.addHook('onSend', async (_request, reply) => {
     reply.header('Cache-Control', 'no-store');

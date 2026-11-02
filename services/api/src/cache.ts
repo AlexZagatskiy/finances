@@ -13,10 +13,12 @@ export class Cache {
   private entries = new Map<string, { value: unknown; fetched: number; expires: number }>();
   private pending = new Map<string, Promise<{ value: unknown; stale: boolean }>>();
   private failures = new Map<string, { until: number; error: unknown }>();
+
   constructor(privateNow: () => number = Date.now, limit = 1000) {
     this.now = privateNow;
     this.limit = limit;
   }
+
   private now: () => number;
   private limit: number;
 
@@ -28,8 +30,10 @@ export class Cache {
   ): Promise<{ value: T; stale: boolean }> {
     const entry = this.entries.get(key);
     if (entry && entry.expires > this.now()) return { value: entry.value as T, stale: false };
+
     const pending = this.pending.get(key);
     if (pending) return pending as Promise<{ value: T; stale: boolean }>;
+
     const fallback = (error: unknown): { value: T; stale: boolean } => {
       const transient =
         !(error instanceof ServiceError) || [429, 502, 503, 504].includes(error.statusCode);

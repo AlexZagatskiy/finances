@@ -2,6 +2,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable, DestroyRef, inject, signal } from '@angular/core';
 import { finalize } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 export interface CurrencyInfo {
   code: string;
@@ -64,14 +65,17 @@ export class CurrencyApi {
   readonly allLoaded = signal(false);
   readonly loading = signal(false);
   readonly error = signal('');
+
+  private readonly apiBaseUrl: string = environment.apiBaseUrl;
+
   bootstrap() {
-    return this.http.get<Bootstrap>('/api/bootstrap');
+    return this.http.get<Bootstrap>(`${this.apiBaseUrl}/api/bootstrap`);
   }
   banks() {
-    return this.http.get<{ banks: BankInfo[] }>('/api/banks');
+    return this.http.get<{ banks: BankInfo[] }>(`${this.apiBaseUrl}/api/banks`);
   }
   convert(request: ConversionRequest) {
-    return this.http.post<Conversion>('/api/convert', request);
+    return this.http.post<Conversion>(`${this.apiBaseUrl}/api/convert`, request);
   }
   loadAll() {
     if (this.allLoaded() || this.loading()) return;
